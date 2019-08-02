@@ -36,10 +36,44 @@ pipelines:
   - name: deploy-to-prod
     templateName: prod.json
     regions:
+      # live production traffic
+      - name: asia-northeast1
+        account: ox-delivery-prod-1-asia-northeast1
+      - name: asia-southeast1
+        account: ox-delivery-prod-1-asia-southeast1
+      - name: europe-west1
+        account: ox-delivery-prod-42-europe-west1
+      - name: us-central1
+        account: ox-delivery-prod-42-us-central1
+      - name: us-east1
+        account: ox-delivery-prod-42-us-east1
+      # doesn't exist
+      # - name: us-east4
+      #   account: ox-delivery-prod-42-us-east4
       - name: us-west1
         account: ox-delivery-prod-42-us-west1
+      # doesn't exist
+      # - name: us-west2
+      #   account: ox-delivery-prod-42-us-west2
+      # new VPC
+      # issues spinning up k8s in region
+      # - name: asia-northeast1
+      #   account: ox-delivery-prod-42-asia-northeast1
+      - name: asia-southeast1
+        account: ox-delivery-prod-42-asia-southeast1
+      - name: europe-west1
+        account: ox-delivery-prod-42-europe-west1
+      - name: us-central1
+        account: ox-delivery-prod-42-us-central1
+      # live production traffiic
+      - name: us-east1
+        account: ox-delivery-prod-42-us-east1
       - name: us-east4
         account: ox-delivery-prod-42-us-east4
+      - name: us-west1
+        account: ox-delivery-prod-42-us-west1
+      - name: us-west2
+        account: ox-delivery-prod-42-us-west2
     notifications:
       - type: slack
         address: ci-cd-notifications
