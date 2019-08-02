@@ -92,7 +92,7 @@ apps:
         - type: pipeline
           # TODO: drop managed when it's not hard coded to the uploader
           application: ads-managed
-          pipeline: deploy-to-qa
+          pipeline: deploy-to-devint
           region: us-east4
       - name: deploy-to-prod
         triggers:
