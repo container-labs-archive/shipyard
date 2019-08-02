@@ -1,0 +1,86 @@
+{
+  "name": "$$PIPELINE_NAME_PREFIX Devint Deploy",
+  "id": "$$STAGE_UUID",
+  "application": "$$PIPELINE_NAME_PREFIX",
+  "appConfig": {},
+  "expectedArtifacts": [
+    {
+      "defaultArtifact": {
+        "id": "013b8bb2-7490-46e5-8f75-dc5ae962f567",
+        "kind": "custom"
+      },
+      "displayName": "$$SERVICE_NAME-devint",
+      "id": "5d6048d5-277a-4ff4-b61a-076064933aea",
+      "matchArtifact": {
+        "id": "05a0ec6d-01e5-4807-92cf-ac2834c297b2",
+        "kind": "base64",
+        "name": "$$SERVICE_NAME-devint",
+        "type": "embedded/base64"
+      },
+      "useDefaultArtifact": false,
+      "usePriorArtifact": true
+    }
+  ],
+  "keepWaitingPipelines": false,
+  "lastModifiedBy": "anonymous",
+  "limitConcurrent": true,
+  "parameterConfig": [
+    {
+      "default": "${trigger['parentExecution']['trigger']['parameters']['imageTag']}",
+      "label": "Image Tag",
+      "name": "imageTag"
+    },
+    {
+      "default": "${trigger['parentExecution']['trigger']['parameters']['appVersion']}",
+      "label": "Version",
+      "name": "appVersion"
+    }
+  ],
+  "notifications": [
+    {
+      "address": "ci-cd-notifications",
+      "level": "pipeline",
+      "type": "slack",
+      "when": [
+        "pipeline.complete",
+        "pipeline.failed"
+      ]
+    }
+  ],
+  "stages": [
+    {
+      "account": "ox-$$STACK-devint-$$INSTANCE_NUMBER-$$REGION",
+      "cloudProvider": "kubernetes",
+      "manifestArtifactAccount": "embedded-artifact",
+      "manifestArtifactId": "5d6048d5-277a-4ff4-b61a-076064933aea",
+      "moniker": {
+        "app": "$$SERVICE_NAME"
+      },
+      "name": "Deploy to Devint",
+      "refId": "1",
+      "relationships": {
+        "loadBalancers": [],
+        "securityGroups": []
+      },
+      "requisiteStageRefIds": [],
+      "source": "artifact",
+      "skipExpressionEvaluation": true,
+      "type": "deployManifest"
+    }
+  ],
+  "triggers": [
+    {
+      "application": "$$TRIGGER_APP_VALUE",
+      "enabled": true,
+      "expectedArtifactIds": [
+        "5d6048d5-277a-4ff4-b61a-076064933aea"
+      ],
+      "pipeline": "$$TRIGGER_PIPELINE_UUID",
+      "status": [
+        "successful"
+      ],
+      "type": "pipeline"
+    }
+  ],
+  "updateTs": "1552281571586"
+}

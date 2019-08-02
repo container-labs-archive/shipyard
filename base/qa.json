@@ -1,0 +1,86 @@
+{
+  "name": "$$PIPELINE_NAME_PREFIX QA Deploy",
+  "id": "$$STAGE_UUID",
+  "application": "$$PIPELINE_NAME_PREFIX",
+  "appConfig": {},
+  "expectedArtifacts": [
+    {
+      "defaultArtifact": {
+        "id": "f188e021-3ff4-4779-ae47-5baa43adbce9",
+        "kind": "custom"
+      },
+      "id": "0153917c-1643-45f2-bcd0-052e547fc196",
+      "displayName": "$$SERVICE_NAME-qa",
+      "matchArtifact": {
+        "id": "b07a2fe7-9c27-43d7-80d8-61aefd0bb0a8",
+        "kind": "base64",
+        "name": "$$SERVICE_NAME-qa",
+        "type": "embedded/base64"
+      },
+      "useDefaultArtifact": false,
+      "usePriorArtifact": true
+    }
+  ],
+  "keepWaitingPipelines": false,
+  "lastModifiedBy": "anonymous",
+  "limitConcurrent": true,
+  "parameterConfig": [
+    {
+      "default": "${trigger['parentExecution']['trigger']['parameters']['imageTag']}",
+      "label": "Image Tag",
+      "name": "imageTag"
+    },
+    {
+      "default": "${trigger['parentExecution']['trigger']['parameters']['appVersion']}",
+      "label": "Version",
+      "name": "appVersion"
+    }
+  ],
+  "notifications": [
+    {
+      "address": "ci-cd-notifications",
+      "level": "pipeline",
+      "type": "slack",
+      "when": [
+        "pipeline.complete",
+        "pipeline.failed"
+      ]
+    }
+  ],
+  "stages": [
+    {
+      "account": "ox-$$STACK-qa-$$INSTANCE_NUMBER-$$REGION",
+      "cloudProvider": "kubernetes",
+      "manifestArtifactAccount": "embedded-artifact",
+      "manifestArtifactId": "0153917c-1643-45f2-bcd0-052e547fc196",
+      "moniker": {
+        "app": "$$SERVICE_NAME"
+      },
+      "name": "Deploy to QA - $$REGION",
+      "refId": "1",
+      "relationships": {
+        "loadBalancers": [],
+        "securityGroups": []
+      },
+      "requisiteStageRefIds": [],
+      "source": "artifact",
+      "skipExpressionEvaluation": true,
+      "type": "deployManifest"
+    }
+  ],
+  "triggers": [
+    {
+      "application": "$$TRIGGER_APP_VALUE",
+      "enabled": true,
+      "expectedArtifactIds": [
+        "0153917c-1643-45f2-bcd0-052e547fc196"
+      ],
+      "pipeline": "$$TRIGGER_PIPELINE_UUID",
+      "status": [
+        "successful"
+      ],
+      "type": "pipeline"
+    }
+  ],
+  "updateTs": "1552327989918"
+}

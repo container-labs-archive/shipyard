@@ -1,0 +1,279 @@
+{
+  "name": "$$PIPELINE_NAME_PREFIX Bake",
+  "id": "$$STAGE_UUID",
+  "application": "$$PIPELINE_NAME_PREFIX",
+  "appConfig": {},
+  "expectedArtifacts": [
+    {
+      "defaultArtifact": {
+        "id": "9c3cd6f9-83e7-4457-9d6a-b2fee7341628",
+        "kind": "default.gcs",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/charts/$$SERVICE_NAME.tgz",
+        "reference": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/charts/$$SERVICE_NAME.tgz",
+        "type": "gcs/object"
+      },
+      "displayName": "$$SERVICE_NAME-charts",
+      "id": "6bb25eb8-de81-4607-ab90-4baeb4366afb",
+      "matchArtifact": {
+        "id": "ca0214a5-4495-480d-a9e2-30bd80e18e46",
+        "kind": "gcs",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/charts/$$SERVICE_NAME.tgz",
+        "type": "gcs/object"
+      },
+      "useDefaultArtifact": true,
+      "usePriorArtifact": false
+    },
+    {
+      "defaultArtifact": {
+        "id": "e6d599f4-4f48-48c1-b6c9-5464edba0d47",
+        "kind": "default.gcs",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values.yaml",
+        "reference": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values.yaml",
+        "type": "gcs/object"
+      },
+      "displayName": "values",
+      "id": "d7dd1f97-b4ec-47f0-a9db-62cd09fddc19",
+      "matchArtifact": {
+        "id": "da9c7488-e215-4d32-a66d-c1afbafd5b36",
+        "kind": "gcs",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values.yaml",
+        "type": "gcs/object"
+      },
+      "useDefaultArtifact": true,
+      "usePriorArtifact": false
+    },
+    {
+      "defaultArtifact": {
+        "id": "f6d34d98-a290-4c28-87ae-63e09552afe2",
+        "kind": "default.gcs",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-devint.yaml",
+        "reference": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-devint.yaml",
+        "type": "gcs/object"
+      },
+      "displayName": "values-devint",
+      "id": "19083e44-7081-41d2-9ab0-39212d1f8be4",
+      "matchArtifact": {
+        "id": "83127a05-4c5e-473b-a634-d21909cd10d0",
+        "kind": "gcs",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-devint.yaml",
+        "type": "gcs/object"
+      },
+      "useDefaultArtifact": true,
+      "usePriorArtifact": false
+    },
+    {
+      "defaultArtifact": {
+        "id": "37aca024-d197-48e7-8ab3-05bb6bfb6440",
+        "kind": "default.gcs",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-qa.yaml",
+        "reference": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-qa.yaml",
+        "type": "gcs/object"
+      },
+      "displayName": "values-qa",
+      "id": "53975bdb-4adf-42c0-9db2-168197c0a832",
+      "matchArtifact": {
+        "id": "84986b2f-5e9c-45ec-97e2-d8ce78502560",
+        "kind": "gcs",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-qa.yaml",
+        "type": "gcs/object"
+      },
+      "useDefaultArtifact": true,
+      "usePriorArtifact": false
+    },
+    {
+      "defaultArtifact": {
+        "id": "fb85821b-8410-472b-8a4d-479f2cda2aa4",
+        "kind": "default.gcs",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-prod.yaml",
+        "reference": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-prod.yaml",
+        "type": "gcs/object"
+      },
+      "displayName": "values-prod",
+      "id": "5e01c5f6-5bd7-4ced-9441-55bed1cbea97",
+      "matchArtifact": {
+        "id": "6a1fcb4e-a5ab-4b28-a874-44a168b27383",
+        "kind": "gcs",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-prod.yaml",
+        "type": "gcs/object"
+      },
+      "useDefaultArtifact": true,
+      "usePriorArtifact": false
+    }
+  ],
+  "keepWaitingPipelines": false,
+  "lastModifiedBy": "anonymous",
+  "limitConcurrent": true,
+  "parameterConfig": [
+    {
+      "default": "${trigger.payload.imageTag}",
+      "label": "Image Tag",
+      "name": "imageTag"
+    },
+    {
+      "default": "${trigger.payload.appVersion}",
+      "label": "Version",
+      "name": "appVersion"
+    }
+  ],
+  "notifications": [
+    {
+      "address": "$$NOTIFICATION_ADDRESS",
+      "level": "pipeline",
+      "type": "slack",
+      "when": [
+        "pipeline.failed"
+      ]
+    }
+  ],
+  "stages": [
+    {
+      "expectedArtifacts": [
+        {
+          "defaultArtifact": {
+            "id": "0872259f-4d81-429b-9dfe-c1b4c5ec5833",
+            "kind": "custom"
+          },
+          "id": "9adb1762-948a-4e62-9d0a-c0aa449fa34d",
+          "displayName": "$$SERVICE_NAME-devint",
+          "matchArtifact": {
+            "id": "47052fb7-981d-476f-b79a-a8bb3a26db9e",
+            "kind": "base64",
+            "name": "$$SERVICE_NAME-devint",
+            "type": "embedded/base64"
+          },
+          "useDefaultArtifact": false,
+          "usePriorArtifact": false
+        }
+      ],
+      "failOnFailedExpressions": true,
+      "inputArtifacts": [
+        {
+          "account": "ox-prod-ci-cd-deployment-artifacts",
+          "id": "6bb25eb8-de81-4607-ab90-4baeb4366afb"
+        },
+        {
+          "account": "ox-prod-ci-cd-deployment-artifacts",
+          "id": "d7dd1f97-b4ec-47f0-a9db-62cd09fddc19"
+        },
+        {
+          "account": "ox-prod-ci-cd-deployment-artifacts",
+          "id": "19083e44-7081-41d2-9ab0-39212d1f8be4"
+        }
+      ],
+      "name": "Bake (Manifest) - Devint",
+      "namespace": "default",
+      "outputName": "$$SERVICE_NAME",
+      "overrides": {
+        "$$IMAGE_TAG_PATH": "${parameters.imageTag}"
+      },
+      "refId": "1",
+      "requisiteStageRefIds": [],
+      "templateRenderer": "HELM2",
+      "type": "bakeManifest"
+    },
+    {
+      "expectedArtifacts": [
+        {
+          "defaultArtifact": {
+            "id": "56e03cd4-a5fb-4ecc-abc9-a7ff4c3c5681",
+            "kind": "custom"
+          },
+          "id": "421bb453-c90d-444f-973e-c9951d0edc66",
+          "displayName": "$$SERVICE_NAME-qa",
+          "matchArtifact": {
+            "id": "583c49c0-ef5e-42de-afd0-5a85a4a4bc50",
+            "kind": "base64",
+            "name": "$$SERVICE_NAME-qa",
+            "type": "embedded/base64"
+          },
+          "useDefaultArtifact": false,
+          "usePriorArtifact": false
+        }
+      ],
+      "failOnFailedExpressions": true,
+      "inputArtifacts": [
+        {
+          "account": "ox-prod-ci-cd-deployment-artifacts",
+          "id": "6bb25eb8-de81-4607-ab90-4baeb4366afb"
+        },
+        {
+          "account": "ox-prod-ci-cd-deployment-artifacts",
+          "id": "d7dd1f97-b4ec-47f0-a9db-62cd09fddc19"
+        },
+        {
+          "account": "ox-prod-ci-cd-deployment-artifacts",
+          "id": "53975bdb-4adf-42c0-9db2-168197c0a832"
+        }
+      ],
+      "name": "Bake (Manifest) - QA",
+      "namespace": "default",
+      "outputName": "$$SERVICE_NAME",
+      "overrides": {
+        "$$IMAGE_TAG_PATH": "${parameters.imageTag}"
+      },
+      "refId": "3",
+      "requisiteStageRefIds": [],
+      "templateRenderer": "HELM2",
+      "type": "bakeManifest"
+    },
+
+    {
+      "expectedArtifacts": [
+        {
+          "defaultArtifact": {
+            "id": "d5c2af38-8017-4db9-89c6-d317ee82d1b1",
+            "kind": "custom"
+          },
+          "id": "a11a3bbf-2d69-49ad-9bc5-284d658595ef",
+          "displayName": "$$SERVICE_NAME-prod",
+          "matchArtifact": {
+            "id": "01f552cc-4367-49cb-bdfc-63e8f217ace4",
+            "kind": "base64",
+            "name": "$$SERVICE_NAME-prod",
+            "type": "embedded/base64"
+          },
+          "useDefaultArtifact": false,
+          "usePriorArtifact": false
+        }
+      ],
+      "failOnFailedExpressions": true,
+      "inputArtifacts": [
+        {
+          "account": "ox-prod-ci-cd-deployment-artifacts",
+          "id": "6bb25eb8-de81-4607-ab90-4baeb4366afb"
+        },
+        {
+          "account": "ox-prod-ci-cd-deployment-artifacts",
+          "id": "d7dd1f97-b4ec-47f0-a9db-62cd09fddc19"
+        },
+        {
+          "account": "ox-prod-ci-cd-deployment-artifacts",
+          "id": "5e01c5f6-5bd7-4ced-9441-55bed1cbea97"
+        }
+      ],
+      "name": "Bake (Manifest) - Prod",
+      "namespace": "default",
+      "outputName": "$$SERVICE_NAME",
+      "overrides": {
+        "$$IMAGE_TAG_PATH": "${parameters.imageTag}"
+      },
+      "refId": "7",
+      "requisiteStageRefIds": [],
+      "templateRenderer": "HELM2",
+      "type": "bakeManifest"
+    }
+  ],
+  "triggers": [
+    {
+      "attributeConstraints": {},
+      "enabled": true,
+      "payloadConstraints": {
+        "appName": "^$$SERVICE_NAME$"
+      },
+      "pubsubSystem": "google",
+      "subscriptionName": "ox-prod-deployment-trigger",
+      "type": "pubsub"
+    }
+  ],
+  "updateTs": "1556652221892"
+}

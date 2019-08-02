@@ -1,0 +1,57 @@
+project:
+  name: 'delivery'
+template_vars:
+  - key: STACK
+    value: delivery
+
+canary_configs:
+  - name: 'broker'
+    templateName: 'something'
+
+pipelines:
+  - name: bake
+    templateName: bake.json
+  - name: deploy-to-qa
+    templateName: qa.json
+    regions:
+      - name: us-west1
+        outputName: qa-us-west1-42.json
+        account: ox-delivery-qa-42-us-west1
+        template_vars:
+          - key: INSTANCE_NUMBER
+            value: 42
+      - name: us-west1
+        outputName: qa-us-west1-24.json
+        account: ox-delivery-qa-24-us-west1
+        template_vars:
+          - key: INSTANCE_NUMBER
+            value: 24
+    triggers:
+      - type: pipeline
+        # TODO: drop managed when it's not hard coded to the uploader
+        application: delivery-managed
+        pipeline: bake
+    # allow yardfile-wide trigger config?
+    notifications:
+      - type: slack
+        address: ci-cd-notifications
+  - name: 'deploy to prod'
+    templateName: prod.json
+    regions:
+      - name: us-west1
+        account: k8s-account
+      - name: us-east1
+        account: k8s-account
+
+apps:
+  currencyservice:
+    template_vars:
+      - key: IMAGE_TAG_PATH
+        value: deployment.containers.currencyservice.imageTag
+  weightwatchers:
+    pipelines:
+      - name: 'bake'
+        templateName: bake.json
+    template_vars:
+      - key: IMAGE_TAG_PATH
+        value: deployment.containers.weightwatchers.imageTag
