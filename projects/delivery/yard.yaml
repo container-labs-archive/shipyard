@@ -49,6 +49,27 @@ pipelines:
         address: ci-cd-notifications
 
 apps:
+  ads:
+    pipelines:
+      - name: deploy-to-qa
+        triggers:
+        - type: pipeline
+          # TODO: drop managed when it's not hard coded to the uploader
+          application: ads-managed
+          pipeline: bake
+      - name: deploy-to-prod
+        triggers:
+        - type: pipeline
+          # TODO: drop managed when it's not hard coded to the uploader
+          application: ads-managed
+          pipeline: deploy-to-qa
+          # TODO: make regions + pipeline pairs easier to manage
+          region: us-east4
+    # TODO: move to overrides
+    template_vars:
+      - key: IMAGE_TAG_PATH
+        value: dsAdvertiser.image.tag
+
   currencyservice:
     pipelines:
       - name: deploy-to-qa
@@ -65,6 +86,7 @@ apps:
           pipeline: deploy-to-qa
           # TODO: make regions + pipeline pairs easier to manage
           region: us-east4
+    # TODO: move to overrides
     template_vars:
       - key: IMAGE_TAG_PATH
         value: deployment.containers.currencyservice.imageTag
@@ -87,6 +109,7 @@ apps:
           pipeline: deploy-to-qa
           # TODO: make regions + pipeline pairs easier to manage
           region: us-east4
+    # TODO: move to overrides
     template_vars:
       - key: IMAGE_TAG_PATH
         value: deployment.containers.weightwatchers.imageTag
