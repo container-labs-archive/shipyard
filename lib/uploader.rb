@@ -167,30 +167,30 @@ module Shipwright
         project_name = path.split('/')[-3]
         app_name = path.split('/')[-2]
 
-        # create_project({
-        #   "name": "#{project_name}-managed",
-        #   "email": "erratic@supernets.com",
-        #   "config": {
-        #     applications: [],
-        #     "pipelineConfigs": [],
-        #     "clusters": []
-        #   },
-        # })
+        create_project({
+          "name": "#{project_name}-managed",
+          "email": "erratic@supernets.com",
+          "config": {
+            applications: [],
+            "pipelineConfigs": [],
+            "clusters": []
+          },
+        })
 
-        # project_apps_hash[project_name] = Set.new unless project_apps_hash[project_name]
-        # project_apps_hash[project_name].add(app_name)
+        project_apps_hash[project_name] = Set.new unless project_apps_hash[project_name]
+        project_apps_hash[project_name].add(app_name)
 
-        # # TODO: authoratative eventually flag
-        # create_application({
-        #   name: "#{app_name}-managed",
-        #   email: "erratic@supernets.com",
-        #   cloudProviders: "kubernetes",
-        #   instancePort: 80,
-        #   dataSources: {
-        #     disabled: [],
-        #     enabled: ['canaryConfigs']
-        #   }
-        # }, project_name)
+        # TODO: authoratative eventually flag
+        create_application({
+          name: "#{app_name}-managed",
+          email: "erratic@supernets.com",
+          cloudProviders: "kubernetes",
+          instancePort: 80,
+          dataSources: {
+            disabled: [],
+            enabled: ['canaryConfigs']
+          }
+        }, project_name)
 
         # associate applications w/ projects
 
