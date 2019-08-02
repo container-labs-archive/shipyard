@@ -14,44 +14,79 @@ pipelines:
   - name: deploy-to-qa
     templateName: qa.json
     regions:
-      - name: us-west1
-        outputName: qa-us-west1-42.json
-        account: ox-delivery-qa-42-us-west1
-        template_vars:
-          - key: INSTANCE_NUMBER
-            value: 42
-      - name: us-west1
-        outputName: qa-us-west1-24.json
-        account: ox-delivery-qa-24-us-west1
+      # TODO: multi-region QA is not yet supported due to downstream trigger issues
+      # - name: us-west1
+      #   outputName: qa-us-west1-42.json
+      #   account: ox-delivery-qa-42-us-west1
+      #   template_vars:
+      #     - key: INSTANCE_NUMBER
+      #       value: 42
+      - name: us-east4
+        # outputName: qa-us-west1-24.json
+        account: ox-delivery-qa-42-us-east4
         template_vars:
           - key: INSTANCE_NUMBER
             value: 24
-    triggers:
-      - type: pipeline
-        # TODO: drop managed when it's not hard coded to the uploader
-        application: delivery-managed
-        pipeline: bake
     # allow yardfile-wide trigger config?
     notifications:
       - type: slack
         address: ci-cd-notifications
-  - name: 'deploy to prod'
+  - name: deploy-to-prod
     templateName: prod.json
     regions:
       - name: us-west1
-        account: k8s-account
-      - name: us-east1
-        account: k8s-account
+        account: ox-delivery-prod-42-us-west1
+        template_vars:
+          - key: INSTANCE_NUMBER
+            value: 42
+      - name: us-east4
+        account: ox-delivery-prod-42-us-east4
+        template_vars:
+          - key: INSTANCE_NUMBER
+            value: 42
+    notifications:
+      - type: slack
+        address: ci-cd-notifications
 
 apps:
   currencyservice:
+    pipelines:
+      - name: deploy-to-qa
+        triggers:
+        - type: pipeline
+          # TODO: drop managed when it's not hard coded to the uploader
+          application: currencyservice-managed
+          pipeline: bake
+      - name: deploy-to-prod
+        triggers:
+        - type: pipeline
+          # TODO: drop managed when it's not hard coded to the uploader
+          application: currencyservice-managed
+          pipeline: deploy-to-qa
+          # TODO: make regions + pipeline pairs easier to manage
+          region: us-east4
     template_vars:
       - key: IMAGE_TAG_PATH
         value: deployment.containers.currencyservice.imageTag
+
   weightwatchers:
     pipelines:
-      - name: 'bake'
+      - name: bake
         templateName: bake.json
+      - name: deploy-to-qa
+        triggers:
+        - type: pipeline
+          # TODO: drop managed when it's not hard coded to the uploader
+          application: weightwatchers-managed
+          pipeline: bake
+      - name: deploy-to-prod
+        triggers:
+        - type: pipeline
+          # TODO: drop managed when it's not hard coded to the uploader
+          application: weightwatchers-managed
+          pipeline: deploy-to-qa
+          # TODO: make regions + pipeline pairs easier to manage
+          region: us-east4
     template_vars:
       - key: IMAGE_TAG_PATH
         value: deployment.containers.weightwatchers.imageTag

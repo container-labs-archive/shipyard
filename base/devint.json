@@ -1,6 +1,6 @@
 {
   "name": "$$PIPELINE_NAME_PREFIX Devint Deploy",
-  "id": "$$STAGE_UUID",
+  "id": "$$PIPELINE_UUID",
   "application": "$$PIPELINE_NAME_PREFIX",
   "appConfig": {},
   "expectedArtifacts": [
@@ -49,7 +49,7 @@
   ],
   "stages": [
     {
-      "account": "ox-$$STACK-devint-$$INSTANCE_NUMBER-$$REGION",
+      "account": "$$ACCOUNT_ID",
       "cloudProvider": "kubernetes",
       "manifestArtifactAccount": "embedded-artifact",
       "manifestArtifactId": "5d6048d5-277a-4ff4-b61a-076064933aea",

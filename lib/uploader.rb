@@ -26,7 +26,7 @@ module Shipwright
       @config = SwaggerClient::Configuration.new
       @config.host = gate_host.split('//')[1]
       @config.scheme = gate_host.split(':')[0]
-      @config.debugging = true
+      # @config.debugging = true
 
       api_client = SwaggerClient::ApiClient.new(@config)
       api_client.default_headers = {
@@ -108,16 +108,17 @@ module Shipwright
     def create_application(app, project_name = nil)
       app_name = app[:name]
 
-      existing_app = @apps.select{|existing_app| existing_app[:name] == app_name }
+      existing_app = @apps.find{|existing_app| existing_app[:name] == app_name }
 
       # unless .empty?
         # TODO: implement app upserts
         @config.logger.debug("app #{app_name} exists, not modifying")
         # return
-      app['id'] = existing_app.first['id']
+      if existing_app
+        app['id'] = existing_app['id']
       # else
       #   puts "#{app_name} doesnt exist, creating"
-      # end
+      end
 
       # if @app_task_hash[app_name].nil?
         task_response = @task_client.task_using_post1({
@@ -138,20 +139,18 @@ module Shipwright
       wait_until_task_completes(@app_task_hash[app_name])
     end
 
+    # can we use the tasks api for this?
     def create_pipeline(pipeline_string)
       pipeline_json = JSON.parse(pipeline_string)
 
       puts "creating pipeline #{pipeline_json['name']}"
       begin
-        @pipeline_client.save_pipeline_using_post(pipeline_string)
+        @pipeline_client.save_pipeline_using_post_with_http_info(pipeline_string)
       rescue SwaggerClient::ApiError => e
-        puts "error #{e}"
-
-
+        # e.code === '400'
+        # hard delete and recreate
         @pipeline_client.delete_pipeline_using_delete(pipeline_json['application'], pipeline_json['name'])
-        @pipeline_client.save_pipeline_using_post(pipeline_string)
-
-        # pipeline_client.update_pipeline_using_put(pipeline_json['id'], pipeline)
+        @pipeline_client.save_pipeline_using_post_with_http_info(pipeline_string)
       end
     end
 
@@ -168,31 +167,30 @@ module Shipwright
         project_name = path.split('/')[-3]
         app_name = path.split('/')[-2]
 
+        # create_project({
+        #   "name": "#{project_name}-managed",
+        #   "email": "erratic@supernets.com",
+        #   "config": {
+        #     applications: [],
+        #     "pipelineConfigs": [],
+        #     "clusters": []
+        #   },
+        # })
 
-        uploader.create_project({
-          "name": "#{project_name}-managed",
-          "email": "erratic@supernets.com",
-          "config": {
-            applications: [],
-            "pipelineConfigs": [],
-            "clusters": []
-          },
-        })
+        # project_apps_hash[project_name] = Set.new unless project_apps_hash[project_name]
+        # project_apps_hash[project_name].add(app_name)
 
-        project_apps_hash[project_name] = Set.new unless project_apps_hash[project_name]
-        project_apps_hash[project_name].add(app_name)
-
-        # TODO: authoratative eventually flag
-        create_application({
-          name: "#{app_name}-managed",
-          email: "erratic@supernets.com",
-          cloudProviders: "kubernetes",
-          instancePort: 80,
-          dataSources: {
-            disabled: [],
-            enabled: ['canaryConfigs']
-          }
-        }, project_name)
+        # # TODO: authoratative eventually flag
+        # create_application({
+        #   name: "#{app_name}-managed",
+        #   email: "erratic@supernets.com",
+        #   cloudProviders: "kubernetes",
+        #   instancePort: 80,
+        #   dataSources: {
+        #     disabled: [],
+        #     enabled: ['canaryConfigs']
+        #   }
+        # }, project_name)
 
         # associate applications w/ projects
 

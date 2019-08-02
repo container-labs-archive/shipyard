@@ -1,6 +1,6 @@
 {
   "name": "$$PIPELINE_NAME_PREFIX Bake",
-  "id": "$$STAGE_UUID",
+  "id": "$$PIPELINE_UUID",
   "application": "$$PIPELINE_NAME_PREFIX",
   "appConfig": {},
   "expectedArtifacts": [

@@ -1,6 +1,6 @@
 {
-  "name": "$$PIPELINE_NAME_PREFIX QA Deploy",
-  "id": "$$STAGE_UUID",
+  "name": "$$PIPELINE_NAME_PREFIX Deploy QA $$REGION $$ACCOUNT_ID",
+  "id": "$$PIPELINE_UUID",
   "application": "$$PIPELINE_NAME_PREFIX",
   "appConfig": {},
   "expectedArtifacts": [
@@ -49,7 +49,7 @@
   ],
   "stages": [
     {
-      "account": "ox-$$STACK-qa-$$INSTANCE_NUMBER-$$REGION",
+      "account": "$$ACCOUNT_ID",
       "cloudProvider": "kubernetes",
       "manifestArtifactAccount": "embedded-artifact",
       "manifestArtifactId": "0153917c-1643-45f2-bcd0-052e547fc196",

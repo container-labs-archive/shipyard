@@ -38,16 +38,22 @@ module Shipwright
       app_template_vars: nil,
       output_name: nil,
       triggers: nil,
-      notifications: nil
+      notifications: nil,
+      account_id: nil,
+      pipeline_name:
     )
-        puts "\trendering #{app_name}"
-        rendered_template = template_string
-
-        pipeline_id = SecureRandom.uuid
-        pipeline_key = "#{app_name}-#{region}"
-        if output_name
-          pipeline_key = "#{app_name}-#{output_name}"
+        rendered_template = template_string.clone
+        pipeline_id = SecureRandom.uuid()
+        pipeline_key = "#{app_name}-#{pipeline_name}"
+        if region
+          pipeline_key = "#{app_name}-#{pipeline_name}-#{region}"
         end
+        # currently overrides multi-region ids
+        # need to enable and fix the multi-region trigger pipeline id finding
+        # if output_name
+        #   pipeline_key = "#{app_name}-#{pipeline_name}-#{output_name}"
+        # end
+        puts "\trendering #{pipeline_key}"
 
         @pipeline_ids[pipeline_key] = pipeline_id
 
@@ -55,34 +61,19 @@ module Shipwright
         rendered_template.gsub!('$$SERVICE_NAME', app_name)
         rendered_template.gsub!('$$PIPELINE_NAME_PREFIX', "#{app_name}-managed")
         rendered_template.gsub!('$$REGION', region) unless region.nil?
-
-        puts "region_template_vars"
-        puts region_template_vars
+        rendered_template.gsub!('$$ACCOUNT_ID', account_id) unless account_id.nil?
 
         unless region_template_vars.nil?
           region_template_vars.each do |template_var|
-            puts "var"
-            puts template_var
             rendered_template.gsub!("$$#{template_var['key']}", "#{template_var['value']}")
           end
         end
 
-        puts "app_template_vars"
-        puts app_template_vars
         unless app_template_vars.nil?
           app_template_vars.each do |template_var|
-            puts "var"
-            puts template_var
             rendered_template.gsub!("$$#{template_var['key']}", "#{template_var['value']}")
           end
         end
-
-        # template_string.gsub!('$$INSTANCE_NUMBER', "#{instance_number}") unless instance_number.nil?
-
-        # TODO: wire up "depends_on"
-        # puts @stage_uuid_hash
-        # bake_uuid = @stage_uuid_hash[app_name]['bake']
-        # rendered_template.gsub!('$$BAKE_UUID', bake_uuid) unless bake_uuid.nil?
 
         unless triggers.nil?
           triggers.each do |trigger|
@@ -90,11 +81,15 @@ module Shipwright
 
             # TODO: once we have typed triggers and pipeline modles we can be smarter about how we build that json
             # app can be a string
-            if trigger['type'] == 'app'
+            if trigger['type'] == 'pipeline'
               rendered_template.gsub!('$$TRIGGER_APP_VALUE', trigger['application'])
 
-              pipeline_id = @pipeline_ids[pipeline_key]
+              trigger_key = "#{trigger['application'].gsub('-managed', '')}-#{trigger['pipeline']}"
+              if trigger['region']
+                trigger_key = "#{trigger_key}-#{trigger['region']}"
+              end
 
+              pipeline_id = @pipeline_ids[trigger_key]
               rendered_template.gsub!('$$TRIGGER_PIPELINE_UUID', pipeline_id)
             end
             if trigger['type'] == 'pubsub'
@@ -114,12 +109,10 @@ module Shipwright
 
     def render_and_write(pipeline_config:, path:, template_name:, project_name:, app_name:, app_template_vars: nil)
       if path.end_with?(template_name)
-        puts "path #{path}"
         template_string = IO.read(path)
 
         if pipeline_config['regions']
           pipeline_config['regions'].each do |region|
-            puts region
             # maybe just append account name?
             output_name = "#{template_name.gsub('.json', '')}-#{region['name']}.json"
             if region['outputName']
@@ -137,7 +130,9 @@ module Shipwright
                 region_template_vars: region['template_vars'],
                 app_template_vars: app_template_vars,
                 output_name: output_name,
-                triggers: pipeline_config['triggers']
+                triggers: pipeline_config['triggers'],
+                account_id: region['account'],
+                pipeline_name: pipeline_config['name']
               )
 
               File.open(output_path, 'w') { |file| file.write(rendered_template) }
@@ -155,7 +150,8 @@ module Shipwright
               app_name: app_name,
               template_string: template_string,
               app_template_vars: app_template_vars,
-              triggers: pipeline_config['triggers']
+              triggers: pipeline_config['triggers'],
+              pipeline_name: pipeline_config['name']
             )
 
             File.open(output_path, 'w') { |file| file.write(rendered_template) }
@@ -186,32 +182,32 @@ module Shipwright
           project_name = yard['project']['name']
           project_pipelines = yard['pipelines']
 
-          puts yard
-
           Dir.mkdir "#{BUILD_DIR}/#{project_name}"
-
-          puts apps
-          puts project_pipelines
+          puts project_name
 
           apps.each do |app_name, app_config|
             Dir.mkdir("#{BUILD_DIR}/#{project_name}/#{app_name}/")
             app_pipelines = Hash.new({})
 
             project_pipelines.each do |pipeline|
-              app_pipelines[pipeline['templateName']] = app_pipelines[pipeline['templateName']].merge(pipeline)
+              app_pipelines[pipeline['name']] = app_pipelines[pipeline['name']].merge(pipeline)
             end
 
             unless app_config.nil? || app_config['pipelines'].nil?
               app_config['pipelines'].each do |pipeline|
-                app_pipelines[pipeline['templateName']] = app_pipelines[pipeline['templateName']].merge(pipeline)
+                app_pipelines[pipeline['name']] = app_pipelines[pipeline['name']].merge(pipeline)
               end
             end
 
-            base_files = Dir["#{Dir.pwd}/base/*"]
-            project_base_files = Dir["#{Dir.pwd}/projects/#{project_dir}/base/*"]
-            app_files = Dir["#{Dir.pwd}/projects/#{project_dir}/#{app_name}/*"]
+            # puts app_pipelines
 
-            app_pipelines.each do|template_name, pipeline_config|
+            base_files = Dir["#{Dir.pwd}/base/*"]
+            project_base_files = Dir["#{project_dir}/base/*"]
+            app_files = Dir["#{project_dir}/#{app_name}/*"]
+
+            app_pipelines.each do|pipeline_name, pipeline_config|
+              template_name = pipeline_config['templateName'] ? pipeline_config['templateName'] : "#{pipeline_name}.json"
+
               app_files.each do|path|
                 render_and_write(
                   pipeline_config: pipeline_config,
