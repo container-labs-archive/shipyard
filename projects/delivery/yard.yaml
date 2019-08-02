@@ -11,6 +11,14 @@ canary_configs:
 pipelines:
   - name: bake
     templateName: bake.json
+  - name: deploy-to-devint
+    templateName: devint.json
+    regions:
+      - name: us-east4
+        account: ox-delivery-devint-24-us-east4
+        template_vars:
+          - key: INSTANCE_NUMBER
+            value: 42
   - name: deploy-to-qa
     templateName: qa.json
     regions:
@@ -23,7 +31,7 @@ pipelines:
       #       value: 42
       - name: us-east4
         # outputName: qa-us-west1-24.json
-        account: ox-delivery-qa-42-us-east4
+        account: ox-delivery-qa-24-us-east4
         template_vars:
           - key: INSTANCE_NUMBER
             value: 24
