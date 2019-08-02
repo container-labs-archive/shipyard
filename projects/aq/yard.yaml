@@ -1,0 +1,62 @@
+project:
+  name: 'aq'
+template_vars:
+  - key: STACK
+    value: aq
+
+pipelines:
+  - name: bake
+    templateName: bake.json
+  - name: deploy-to-devint
+    templateName: devint.json
+    regions:
+      - name: us-central1
+        account: ox-aq-devint-1-us-central1
+  - name: deploy-to-qa
+    templateName: qa.json
+    regions:
+      - name: us-central1
+        account: ox-aq-qa-1-us-central1
+    # allow yardfile-wide trigger config?
+    notifications:
+      - type: slack
+        address: aq_ci-cd
+  - name: deploy-to-prod
+    templateName: prod.json
+    regions:
+      - name: us-central1
+        account: ox-aq-prod-1-us-central1
+    notifications:
+      - type: slack
+        address: aq_ci-cd
+
+apps:
+  blocking-service:
+    pipelines:
+      - name: deploy-to-devint
+        triggers:
+        - type: pipeline
+          # TODO: drop managed when it's not hard coded to the uploader
+          application: blocking-service-managed
+          pipeline: bake
+      - name: deploy-to-qa
+        triggers:
+        - type: pipeline
+          # TODO: drop managed when it's not hard coded to the uploader
+          application: blocking-service-managed
+          pipeline: deploy-to-devint
+          region: us-central1
+      - name: deploy-to-prod
+        triggers:
+        - type: pipeline
+          # TODO: drop managed when it's not hard coded to the uploader
+          application: blocking-service-managed
+          pipeline: deploy-to-qa
+          # TODO: make regions + pipeline pairs easier to manage
+          region: us-central1
+    # TODO: move to overrides
+    template_vars:
+      - key: IMAGE_TAG_PATH
+        value: deployment.containers.aqBlockingServiceJava.imageTag
+
+
