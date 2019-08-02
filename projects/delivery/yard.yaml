@@ -47,12 +47,19 @@ pipelines:
 apps:
   ads:
     pipelines:
-      - name: deploy-to-qa
+      - name: deploy-to-devint
         triggers:
         - type: pipeline
           # TODO: drop managed when it's not hard coded to the uploader
           application: ads-managed
           pipeline: bake
+      - name: deploy-to-qa
+        triggers:
+        - type: pipeline
+          # TODO: drop managed when it's not hard coded to the uploader
+          application: ads-managed
+          pipeline: deploy-to-qa
+          region: us-east4
       - name: deploy-to-prod
         triggers:
         - type: pipeline
@@ -68,12 +75,19 @@ apps:
 
   currencyservice:
     pipelines:
+      - name: deploy-to-devint
+        triggers:
+        - type: pipeline
+          # TODO: drop managed when it's not hard coded to the uploader
+          application: ads-managed
+          pipeline: bake
       - name: deploy-to-qa
         triggers:
         - type: pipeline
           # TODO: drop managed when it's not hard coded to the uploader
           application: currencyservice-managed
-          pipeline: bake
+          pipeline: deploy-to-devint
+          region: us-east4
       - name: deploy-to-prod
         triggers:
         - type: pipeline
@@ -91,12 +105,19 @@ apps:
     pipelines:
       - name: bake
         templateName: bake.json
-      - name: deploy-to-qa
+      - name: deploy-to-devint
         triggers:
         - type: pipeline
           # TODO: drop managed when it's not hard coded to the uploader
           application: weightwatchers-managed
           pipeline: bake
+      - name: deploy-to-qa
+        triggers:
+        - type: pipeline
+          # TODO: drop managed when it's not hard coded to the uploader
+          application: weightwatchers-managed
+          pipeline: deploy-to-devint
+          region: us-east4
       - name: deploy-to-prod
         triggers:
         - type: pipeline
