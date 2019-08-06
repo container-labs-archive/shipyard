@@ -11,3 +11,4 @@
 + move lib to own gem
 + generate and use models
 + rewrite parser in a functional way
++ ability to sync with spinnaker instance, get diff, and resolve
