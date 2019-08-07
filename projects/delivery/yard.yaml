@@ -28,7 +28,7 @@ pipelines:
       #       value: 42
       - name: us-east4
         # outputName: qa-us-west1-24.json
-        account: ox-delivery-qa-24-us-east4
+        account: ox-delivery-qa-42-us-east4
     # allow yardfile-wide trigger config?
     notifications:
       - type: slack
