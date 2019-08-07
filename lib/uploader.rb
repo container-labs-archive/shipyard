@@ -8,7 +8,7 @@ module Shipwright
   class Uploader
     def initialize
       token = ENV['GCLOUD_TOKEN']
-      gate_host = 'https://gate-spinnaker.prod.gcp.openx.org' || ENV['GATE_HOST']
+      gate_host = 'https://gate-spinnaker.devint.gcp.openx.org' || ENV['GATE_HOST']
 
       response = Faraday.get("#{gate_host}/login") do|req|
         req.headers['Authorization'] = "Bearer #{token}"
@@ -26,7 +26,7 @@ module Shipwright
       @config = SwaggerClient::Configuration.new
       @config.host = gate_host.split('//')[1]
       @config.scheme = gate_host.split(':')[0]
-      # @config.debugging = true
+      @config.debugging = ENV['DEBUG'] || false
 
       api_client = SwaggerClient::ApiClient.new(@config)
       api_client.default_headers = {
