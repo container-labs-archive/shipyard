@@ -15,7 +15,7 @@ pipelines:
     templateName: devint.json
     regions:
       - name: us-east4
-        account: ox-delivery-devint-24-us-east4
+        account: ox-delivery-devint-42-us-east4
   - name: deploy-to-qa
     templateName: qa.json
     regions:
