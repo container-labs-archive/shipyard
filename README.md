@@ -49,3 +49,4 @@ GCLOUD_TOKEN=$GCLOUD_TOKEN GATE_HOST=$GATE_HOST ruby upload.rb
 + move lib to own gem
 + generate and use models
 + rewrite parser in a functional way
++ ability to sync with spinnaker instance, get diff, and resolve
