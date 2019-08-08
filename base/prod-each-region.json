@@ -1,0 +1,95 @@
+{
+  "name": "$$PIPELINE_NAME_PREFIX Deploy Prod $$REGION $$ACCOUNT_ID",
+  "application": "$$PIPELINE_NAME_PREFIX",
+  "appConfig": {},
+  "expectedArtifacts": [
+    {
+      "defaultArtifact": {
+        "id": "457728fc-3aec-4507-aac1-2b4aabb0ab33",
+        "kind": "custom"
+      },
+      "displayName": "$$SERVICE_NAME-prod-$$REGION",
+      "id": "df7732ce-16c1-422f-9896-d61be1419728",
+      "matchArtifact": {
+        "id": "3feaaada-e777-45d0-9655-fe215bc55f49",
+        "kind": "base64",
+        "name": "$$SERVICE_NAME-prod-$$REGION",
+        "type": "embedded/base64"
+      },
+      "useDefaultArtifact": false,
+      "usePriorArtifact": true
+    }
+  ],
+  "keepWaitingPipelines": false,
+  "lastModifiedBy": "anonymous",
+  "limitConcurrent": true,
+  "parameterConfig": [
+    {
+      "default": "${trigger['parentExecution']['trigger']['parameters']['imageTag']}",
+      "name": "imageTag"
+    },
+    {
+      "default": "${trigger['parentExecution']['trigger']['parameters']['appVersion']}",
+      "name": "appVersion"
+    }
+  ],
+  "notifications": [
+    {
+      "address": "ci-cd-notifications",
+      "level": "pipeline",
+      "type": "slack",
+      "when": [
+        "pipeline.complete",
+        "pipeline.failed"
+      ]
+    }
+  ],
+  "stages": [
+    {
+      "account": "$$ACCOUNT_ID",
+      "cloudProvider": "kubernetes",
+      "manifestArtifactAccount": "embedded-artifact",
+      "manifestArtifactId": "df7732ce-16c1-422f-9896-d61be1419728",
+      "moniker": {
+        "app": "$$SERVICE_NAME"
+      },
+      "name": "Deploy to $$REGION $$ACCOUNT_ID",
+      "refId": "1",
+      "relationships": {
+        "loadBalancers": [],
+        "securityGroups": []
+      },
+      "requisiteStageRefIds": [
+        "2"
+      ],
+      "skipExpressionEvaluation": true,
+      "source": "artifact",
+      "type": "deployManifest"
+    },
+    {
+      "failPipeline": true,
+      "instructions": "Deploy ${parameters[\"appVersion\"]} to Production $$REGION $$ACCOUNT_ID?",
+      "judgmentInputs": [],
+      "name": "Manual Judgement",
+      "notifications": [],
+      "refId": "2",
+      "requisiteStageRefIds": [],
+      "type": "manualJudgment"
+    }
+  ],
+  "triggers": [
+    {
+      "application": "$$TRIGGER_APP_VALUE",
+      "enabled": true,
+      "expectedArtifactIds": [
+        "df7732ce-16c1-422f-9896-d61be1419728"
+      ],
+      "pipeline": "$$TRIGGER_PIPELINE_UUID",
+      "status": [
+        "successful"
+      ],
+      "type": "pipeline"
+    }
+  ],
+  "updateTs": "1556651498734"
+}

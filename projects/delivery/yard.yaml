@@ -45,9 +45,6 @@ pipelines:
         account: ox-delivery-prod-42-us-central1
       - name: us-east1
         account: ox-delivery-prod-42-us-east1
-      # doesn't exist
-      # - name: us-east4
-      #   account: ox-delivery-prod-42-us-east4
       - name: us-west1
         account: ox-delivery-prod-42-us-west1
       # doesn't exist
@@ -159,6 +156,65 @@ apps:
     template_vars:
       - key: IMAGE_TAG_PATH
         value: deployment.containers.currencyservice.imageTag
+
+  gateway:
+    pipelines:
+      - name: bake
+        templateName: bake-each-region.json
+      - name: deploy-to-devint
+        triggers:
+        - type: pipeline
+          # TODO: drop -managed when it's not hard coded to the uploader
+          application: gateway-managed
+          pipeline: bake
+      - name: deploy-to-qa
+        triggers:
+        - type: pipeline
+          # TODO: drop -managed when it's not hard coded to the uploader
+          application: gateway-managed
+          pipeline: deploy-to-devint
+          region: us-east4
+      - name: deploy-to-prod
+        templateName: prod-each-region.json
+        triggers:
+        - type: pipeline
+          # TODO: drop -managed when it's not hard coded to the uploader
+          application: gateway-managed
+          pipeline: deploy-to-qa
+          # TODO: make regions + pipeline pairs easier to manage
+          region: us-east4
+    # TODO: move to overrides
+    template_vars:
+      - key: IMAGE_TAG_PATH
+        value: deployment.containers.mops.imageTag
+
+  mops:
+    pipelines:
+      - name: deploy-to-devint
+        triggers:
+        - type: pipeline
+          # TODO: drop -managed when it's not hard coded to the uploader
+          application: mops-managed
+          pipeline: bake
+      - name: deploy-to-qa
+        triggers:
+        - type: pipeline
+          # TODO: drop -managed when it's not hard coded to the uploader
+          application: mops-managed
+          pipeline: deploy-to-devint
+          region: us-east4
+      - name: deploy-to-prod
+        triggers:
+        - type: pipeline
+          # TODO: drop -managed when it's not hard coded to the uploader
+          application: mops-managed
+          pipeline: deploy-to-qa
+          # TODO: make regions + pipeline pairs easier to manage
+          region: us-east4
+    # TODO: move to overrides
+    template_vars:
+      - key: IMAGE_TAG_PATH
+        value: deployment.containers.mops.imageTag
 
   weightwatchers:
     pipelines:

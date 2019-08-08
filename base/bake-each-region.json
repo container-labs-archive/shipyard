@@ -1,20 +1,23 @@
 {
   "appConfig": {},
+  "name": "$$PIPELINE_NAME_PREFIX Bake",
+  "id": "$$PIPELINE_UUID",
+  "application": "$$PIPELINE_NAME_PREFIX",
   "expectedArtifacts": [
     {
       "defaultArtifact": {
         "id": "9c3cd6f9-83e7-4457-9d6a-b2fee7341628",
         "kind": "default.gcs",
-        "name": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/charts/gateway.tgz",
-        "reference": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/charts/gateway.tgz",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/charts/$$SERVICE_NAME.tgz",
+        "reference": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/charts/$$SERVICE_NAME.tgz",
         "type": "gcs/object"
       },
-      "displayName": "gateway-chart",
+      "displayName": "$$SERVICE_NAME-charts",
       "id": "6bb25eb8-de81-4607-ab90-4baeb4366afb",
       "matchArtifact": {
         "id": "ca0214a5-4495-480d-a9e2-30bd80e18e46",
         "kind": "gcs",
-        "name": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/charts/gateway.tgz",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/charts/$$SERVICE_NAME.tgz",
         "type": "gcs/object"
       },
       "useDefaultArtifact": true,
@@ -24,8 +27,8 @@
       "defaultArtifact": {
         "id": "e6d599f4-4f48-48c1-b6c9-5464edba0d47",
         "kind": "default.gcs",
-        "name": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/values/values.yaml",
-        "reference": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/values/values.yaml",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values.yaml",
+        "reference": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values.yaml",
         "type": "gcs/object"
       },
       "displayName": "values",
@@ -33,7 +36,7 @@
       "matchArtifact": {
         "id": "da9c7488-e215-4d32-a66d-c1afbafd5b36",
         "kind": "gcs",
-        "name": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/values/values.yaml",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values.yaml",
         "type": "gcs/object"
       },
       "useDefaultArtifact": true,
@@ -43,8 +46,8 @@
       "defaultArtifact": {
         "id": "f6d34d98-a290-4c28-87ae-63e09552afe2",
         "kind": "default.gcs",
-        "name": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/values/values-devint.yaml",
-        "reference": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/values/values-devint.yaml",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-devint.yaml",
+        "reference": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-devint.yaml",
         "type": "gcs/object"
       },
       "displayName": "values-devint",
@@ -52,7 +55,7 @@
       "matchArtifact": {
         "id": "83127a05-4c5e-473b-a634-d21909cd10d0",
         "kind": "gcs",
-        "name": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/values/values-devint.yaml",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-devint.yaml",
         "type": "gcs/object"
       },
       "useDefaultArtifact": true,
@@ -62,8 +65,8 @@
       "defaultArtifact": {
         "id": "37aca024-d197-48e7-8ab3-05bb6bfb6440",
         "kind": "default.gcs",
-        "name": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/values/values-qa.yaml",
-        "reference": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/values/values-qa.yaml",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-qa.yaml",
+        "reference": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-qa.yaml",
         "type": "gcs/object"
       },
       "displayName": "values-qa",
@@ -71,7 +74,7 @@
       "matchArtifact": {
         "id": "84986b2f-5e9c-45ec-97e2-d8ce78502560",
         "kind": "gcs",
-        "name": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/values/values-qa.yaml",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-qa.yaml",
         "type": "gcs/object"
       },
       "useDefaultArtifact": true,
@@ -81,8 +84,8 @@
       "defaultArtifact": {
         "id": "fb85821b-8410-472b-8a4d-479f2cda2aa4",
         "kind": "default.gcs",
-        "name": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/values/values-prod.yaml",
-        "reference": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/values/values-prod.yaml",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-prod.yaml",
+        "reference": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-prod.yaml",
         "type": "gcs/object"
       },
       "displayName": "values-prod",
@@ -90,7 +93,7 @@
       "matchArtifact": {
         "id": "6a1fcb4e-a5ab-4b28-a874-44a168b27383",
         "kind": "gcs",
-        "name": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/values/values-prod.yaml",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-prod.yaml",
         "type": "gcs/object"
       },
       "useDefaultArtifact": true,
@@ -100,8 +103,8 @@
       "defaultArtifact": {
         "id": "24c8e1e8-6751-4e30-8dae-6fc06658c54b",
         "kind": "default.gcs",
-        "name": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/values/values-prod-asia-southeast1.yaml",
-        "reference": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/values/values-prod-asia-southeast1.yaml",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-prod-asia-southeast1.yaml",
+        "reference": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-prod-asia-southeast1.yaml",
         "type": "gcs/object"
       },
       "displayName": "values-prod-asia-southeast1",
@@ -109,7 +112,7 @@
       "matchArtifact": {
         "id": "c88254b4-b656-4458-9fee-a5d49d976abe",
         "kind": "gcs",
-        "name": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/values/values-prod-asia-southeast1.yaml",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-prod-asia-southeast1.yaml",
         "type": "gcs/object"
       },
       "useDefaultArtifact": true,
@@ -118,15 +121,15 @@
     {
       "defaultArtifact": {
         "id": "4c5e7710-f828-4c1d-82ae-c256541fa1ca",
-        "name": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/values/values-prod-us-west1.yaml",
-        "reference": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/values/values-prod-us-west1.yaml",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-prod-us-west1.yaml",
+        "reference": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-prod-us-west1.yaml",
         "type": "gcs/object"
       },
       "displayName": "values-prod-us-west1",
       "id": "915d5e8a-bd0e-4235-ba6c-2f75e98bd825",
       "matchArtifact": {
         "id": "6c2c5340-957a-47bf-95bb-24c62ac0a4cd",
-        "name": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/values/values-prod-us-west1.yaml",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-prod-us-west1.yaml",
         "type": "gcs/object"
       },
       "useDefaultArtifact": true,
@@ -135,15 +138,15 @@
     {
       "defaultArtifact": {
         "id": "d139bd34-f684-4a01-8376-12bd1b3ab6e7",
-        "name": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/values/values-prod-us-central1.yaml",
-        "reference": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/values/values-prod-us-central1.yaml",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-prod-us-central1.yaml",
+        "reference": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-prod-us-central1.yaml",
         "type": "gcs/object"
       },
       "displayName": "values-prod-us-central1",
       "id": "3c05ea30-d976-43ac-af0b-3f36bb655e5b",
       "matchArtifact": {
         "id": "66ee9380-167f-4d1d-8314-43bac12173a1",
-        "name": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/values/values-prod-us-central1.yaml",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-prod-us-central1.yaml",
         "type": "gcs/object"
       },
       "useDefaultArtifact": true,
@@ -152,15 +155,15 @@
     {
       "defaultArtifact": {
         "id": "3a75186a-8872-4c08-b847-9035fbc1ec30",
-        "name": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/values/values-prod-us-east1.yaml",
-        "reference": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/values/values-prod-us-east1.yaml",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-prod-us-east1.yaml",
+        "reference": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-prod-us-east1.yaml",
         "type": "gcs/object"
       },
       "displayName": "values-prod-us-east1",
       "id": "adac837e-358c-4df8-bc9b-0f8af1d5454f",
       "matchArtifact": {
         "id": "9f665692-73a6-45bb-9db5-dbf76ca23202",
-        "name": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/values/values-prod-us-east1.yaml",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-prod-us-east1.yaml",
         "type": "gcs/object"
       },
       "useDefaultArtifact": true,
@@ -169,15 +172,15 @@
     {
       "defaultArtifact": {
         "id": "a02fede7-65dc-4eff-aa87-a832fc2fd5f2",
-        "name": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/values/values-prod-europe-west1.yaml",
-        "reference": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/values/values-prod-europe-west1.yaml",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-prod-europe-west1.yaml",
+        "reference": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-prod-europe-west1.yaml",
         "type": "gcs/object"
       },
       "displayName": "values-prod-europe-west1",
       "id": "4eda8966-a673-46b6-a4fb-762d2950a172",
       "matchArtifact": {
         "id": "5a43a706-7964-425d-a1bf-017e1ca95f5a",
-        "name": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/values/values-prod-europe-west1.yaml",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-prod-europe-west1.yaml",
         "type": "gcs/object"
       },
       "useDefaultArtifact": true,
@@ -186,15 +189,15 @@
     {
       "defaultArtifact": {
         "id": "69387a49-c99c-440f-a7b1-30ac78446161",
-        "name": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/values/values-prod-asia-northeast1.yaml",
-        "reference": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/values/values-prod-asia-northeast1.yaml",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-prod-asia-northeast1.yaml",
+        "reference": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-prod-asia-northeast1.yaml",
         "type": "gcs/object"
       },
       "displayName": "values-prod-asia-northeast1",
       "id": "9e6a779e-50db-492e-b66e-c6eb65a03b42",
       "matchArtifact": {
         "id": "abfc99a0-4c4e-4d76-9de9-4dbea71eebd6",
-        "name": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/values/values-prod-asia-northeast1.yaml",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-prod-asia-northeast1.yaml",
         "type": "gcs/object"
       },
       "useDefaultArtifact": true,
@@ -203,15 +206,15 @@
     {
       "defaultArtifact": {
         "id": "c8c1f354-0354-49f2-a24e-983c351ce4d6",
-        "name": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/values/values-prod-us-west2.yaml",
-        "reference": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/values/values-prod-us-west2.yaml",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-prod-us-west2.yaml",
+        "reference": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-prod-us-west2.yaml",
         "type": "gcs/object"
       },
       "displayName": "values-prod-us-west2",
       "id": "8f97d505-6856-4e6c-804a-61ef51e33250",
       "matchArtifact": {
         "id": "7891c17f-f975-4eed-aab7-12f889cba1fd",
-        "name": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/values/values-prod-us-west2.yaml",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-prod-us-west2.yaml",
         "type": "gcs/object"
       },
       "useDefaultArtifact": true,
@@ -220,15 +223,15 @@
     {
       "defaultArtifact": {
         "id": "445a57fe-4f0c-41d3-b702-71da68b22dce",
-        "name": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/values/values-prod-us-east4.yaml",
-        "reference": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/values/values-prod-us-east4.yaml",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-prod-us-east4.yaml",
+        "reference": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-prod-us-east4.yaml",
         "type": "gcs/object"
       },
       "displayName": "values-prod-us-east4",
       "id": "d13625b7-f9fc-4a44-a845-c0297fcd2818",
       "matchArtifact": {
         "id": "50ae1255-8887-49c1-b59b-dd72debffa26",
-        "name": "gs://ox-prod-ci-cd-deployment-artifacts/gateway/values/values-prod-us-east4.yaml",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/$$SERVICE_NAME/values/values-prod-us-east4.yaml",
         "type": "gcs/object"
       },
       "useDefaultArtifact": true,
@@ -236,16 +239,15 @@
     }
   ],
   "keepWaitingPipelines": false,
-  "lastModifiedBy": "joel.meyer@openx.com",
   "limitConcurrent": true,
   "parameterConfig": [
     {
-      "default": "",
+      "default": "${trigger.payload.imageTag}",
       "label": "Image Tag",
       "name": "imageTag"
     },
     {
-      "default": "",
+      "default": "${trigger.payload.appVersion}",
       "label": "Version",
       "name": "appVersion"
     }
@@ -262,7 +264,7 @@
           "matchArtifact": {
             "id": "47052fb7-981d-476f-b79a-a8bb3a26db9e",
             "kind": "base64",
-            "name": "gateway-devint",
+            "name": "$$SERVICE_NAME-devint",
             "type": "embedded/base64"
           },
           "useDefaultArtifact": false,
@@ -282,10 +284,10 @@
       ],
       "name": "Bake (Manifest) - Devint",
       "namespace": "default",
-      "outputName": "gateway",
+      "outputName": "$$SERVICE_NAME-devint",
       "overrides": {
         "containers.oxHttpGateway.imagePullPolicy": "Always",
-        "containers.oxHttpGateway.imageTag": "${parameters.imageTag}"
+        "$$IMAGE_TAG_PATH": "${parameters.imageTag}"
       },
       "refId": "1",
       "requisiteStageRefIds": [],
@@ -303,7 +305,7 @@
           "matchArtifact": {
             "id": "583c49c0-ef5e-42de-afd0-5a85a4a4bc50",
             "kind": "base64",
-            "name": "gateway-qa",
+            "name": "$$SERVICE_NAME-qa",
             "type": "embedded/base64"
           },
           "useDefaultArtifact": false,
@@ -323,10 +325,10 @@
       ],
       "name": "Bake (Manifest) - QA",
       "namespace": "default",
-      "outputName": "gateway",
+      "outputName": "$$SERVICE_NAME-qa",
       "overrides": {
         "containers.oxHttpGateway.imagePullPolicy": "Always",
-        "containers.oxHttpGateway.imageTag": "${parameters.imageTag}"
+        "$$IMAGE_TAG_PATH": "${parameters.imageTag}"
       },
       "refId": "3",
       "requisiteStageRefIds": [],
@@ -344,7 +346,7 @@
           "matchArtifact": {
             "id": "01f552cc-4367-49cb-bdfc-63e8f217ace4",
             "kind": "base64",
-            "name": "gateway-prod-asia-southeast1",
+            "name": "$$SERVICE_NAME-prod-asia-southeast1",
             "type": "embedded/base64"
           },
           "useDefaultArtifact": false,
@@ -368,10 +370,10 @@
       ],
       "name": "Bake (Manifest) - Prod - asia-southeast1",
       "namespace": "default",
-      "outputName": "gateway",
+      "outputName": "$$SERVICE_NAME-prod-asia-southeast1",
       "overrides": {
         "containers.oxHttpGateway.imagePullPolicy": "Always",
-        "containers.oxHttpGateway.imageTag": "${parameters.imageTag}",
+        "$$IMAGE_TAG_PATH": "${parameters.imageTag}",
         "hpa.maxReplicas": "60",
         "hpa.minReplicas": "30"
       },
@@ -391,7 +393,7 @@
           "matchArtifact": {
             "id": "01f552cc-4367-49cb-bdfc-63e8f217ace4",
             "kind": "base64",
-            "name": "gateway-prod-us-west1",
+            "name": "$$SERVICE_NAME-prod-us-west1",
             "type": "embedded/base64"
           },
           "useDefaultArtifact": false,
@@ -415,10 +417,10 @@
       ],
       "name": "Bake (Manifest) - Prod - us-west1",
       "namespace": "default",
-      "outputName": "gateway",
+      "outputName": "$$SERVICE_NAME-prod-us-west1",
       "overrides": {
         "containers.oxHttpGateway.imagePullPolicy": "Always",
-        "containers.oxHttpGateway.imageTag": "${parameters.imageTag}"
+        "$$IMAGE_TAG_PATH": "${parameters.imageTag}"
       },
       "refId": "6",
       "requisiteStageRefIds": [],
@@ -436,7 +438,7 @@
           "matchArtifact": {
             "id": "01f552cc-4367-49cb-bdfc-63e8f217ace4",
             "kind": "base64",
-            "name": "gateway-prod-us-east1",
+            "name": "$$SERVICE_NAME-prod-us-east1",
             "type": "embedded/base64"
           },
           "useDefaultArtifact": false,
@@ -460,9 +462,9 @@
       ],
       "name": "Bake (Manifest) - Prod - us-east1",
       "namespace": "default",
-      "outputName": "gateway",
+      "outputName": "$$SERVICE_NAME-prod-us-east1",
       "overrides": {
-        "containers.oxHttpGateway.imageTag": "${parameters.imageTag}"
+        "$$IMAGE_TAG_PATH": "${parameters.imageTag}"
       },
       "refId": "7",
       "requisiteStageRefIds": [],
@@ -480,7 +482,7 @@
           "matchArtifact": {
             "id": "01f552cc-4367-49cb-bdfc-63e8f217ace4",
             "kind": "base64",
-            "name": "gateway-prod-us-central1",
+            "name": "$$SERVICE_NAME-prod-us-central1",
             "type": "embedded/base64"
           },
           "useDefaultArtifact": false,
@@ -504,9 +506,9 @@
       ],
       "name": "Bake (Manifest) - Prod - us-central1",
       "namespace": "default",
-      "outputName": "gateway",
+      "outputName": "$$SERVICE_NAME-prod-us-central1",
       "overrides": {
-        "containers.oxHttpGateway.imageTag": "${parameters.imageTag}"
+        "$$IMAGE_TAG_PATH": "${parameters.imageTag}"
       },
       "refId": "8",
       "requisiteStageRefIds": [],
@@ -524,7 +526,7 @@
           "matchArtifact": {
             "id": "01f552cc-4367-49cb-bdfc-63e8f217ace4",
             "kind": "base64",
-            "name": "gateway-prod-europe-west1",
+            "name": "$$SERVICE_NAME-prod-europe-west1",
             "type": "embedded/base64"
           },
           "useDefaultArtifact": false,
@@ -548,9 +550,9 @@
       ],
       "name": "Bake (Manifest) - Prod - europe-west1",
       "namespace": "default",
-      "outputName": "gateway",
+      "outputName": "$$SERVICE_NAME-prod-europe-west1",
       "overrides": {
-        "containers.oxHttpGateway.imageTag": "${parameters.imageTag}"
+        "$$IMAGE_TAG_PATH": "${parameters.imageTag}"
       },
       "refId": "9",
       "requisiteStageRefIds": [],
@@ -568,7 +570,7 @@
           "matchArtifact": {
             "id": "01f552cc-4367-49cb-bdfc-63e8f217ace4",
             "kind": "base64",
-            "name": "gateway-prod-asia-northeast1",
+            "name": "$$SERVICE_NAME-prod-asia-northeast1",
             "type": "embedded/base64"
           },
           "useDefaultArtifact": false,
@@ -592,9 +594,9 @@
       ],
       "name": "Bake (Manifest) - Prod - asia-northeast1",
       "namespace": "default",
-      "outputName": "gateway",
+      "outputName": "$$SERVICE_NAME-prod-asia-northeast1",
       "overrides": {
-        "containers.oxHttpGateway.imageTag": "${parameters.imageTag}"
+        "$$IMAGE_TAG_PATH": "${parameters.imageTag}"
       },
       "refId": "10",
       "requisiteStageRefIds": [],
@@ -612,7 +614,7 @@
           "matchArtifact": {
             "id": "01f552cc-4367-49cb-bdfc-63e8f217ace4",
             "kind": "base64",
-            "name": "gateway-prod-us-west2",
+            "name": "$$SERVICE_NAME-prod-us-west2",
             "type": "embedded/base64"
           },
           "useDefaultArtifact": false,
@@ -636,10 +638,9 @@
       ],
       "name": "Bake (Manifest) - Prod - us-west2",
       "namespace": "default",
-      "outputName": "gateway",
+      "outputName": "$$SERVICE_NAME-prod-us-west2",
       "overrides": {
-        "containers.oxHttpGateway.imagePullPolicy": "Always",
-        "containers.oxHttpGateway.imageTag": "${parameters.imageTag}"
+        "$$IMAGE_TAG_PATH": "${parameters.imageTag}"
       },
       "refId": "11",
       "requisiteStageRefIds": [],
@@ -657,7 +658,7 @@
           "matchArtifact": {
             "id": "01f552cc-4367-49cb-bdfc-63e8f217ace4",
             "kind": "base64",
-            "name": "gateway-prod-us-east4",
+            "name": "$$SERVICE_NAME-prod-us-east4",
             "type": "embedded/base64"
           },
           "useDefaultArtifact": false,
@@ -681,9 +682,9 @@
       ],
       "name": "Bake (Manifest) - Prod - us-east4",
       "namespace": "default",
-      "outputName": "gateway",
+      "outputName": "$$SERVICE_NAME-prod-us-east4",
       "overrides": {
-        "containers.oxHttpGateway.imageTag": "${parameters.imageTag}"
+        "$$IMAGE_TAG_PATH": "${parameters.imageTag}"
       },
       "refId": "12",
       "requisiteStageRefIds": [],
@@ -696,11 +697,21 @@
       "attributeConstraints": {},
       "enabled": true,
       "payloadConstraints": {
-        "appName": "^gateway$"
+        "appName": "^$$SERVICE_NAME$"
       },
       "pubsubSystem": "google",
       "subscriptionName": "ox-prod-deployment-trigger",
       "type": "pubsub"
+    }
+  ],
+  "notifications": [
+    {
+      "address": "$$NOTIFICATION_ADDRESS",
+      "level": "pipeline",
+      "type": "slack",
+      "when": [
+        "pipeline.failed"
+      ]
     }
   ],
   "updateTs": "1562092031210"
