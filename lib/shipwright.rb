@@ -36,6 +36,7 @@ module Shipwright
       template_string:,
       region_template_vars: nil,
       app_template_vars: nil,
+      pipeline_template_vars: nil,
       output_name: nil,
       triggers: nil,
       notifications: nil,
@@ -63,18 +64,10 @@ module Shipwright
         rendered_template.gsub!('$$REGION', region) unless region.nil?
         rendered_template.gsub!('$$ACCOUNT_ID', account_id) unless account_id.nil?
 
-        unless region_template_vars.nil?
-          region_template_vars.each do |template_var|
-            rendered_template.gsub!("$$#{template_var['key']}", "#{template_var['value']}")
-          end
-        end
-
-        unless app_template_vars.nil?
-          app_template_vars.each do |template_var|
-            rendered_template.gsub!("$$#{template_var['key']}", "#{template_var['value']}")
-          end
-        end
-
+        render_template_vars(rendered_template, region_template_vars)
+        render_template_vars(rendered_template, pipeline_template_vars)
+        render_template_vars(rendered_template, app_template_vars)
+      
         unless triggers.nil?
           triggers.each do |trigger|
             # find pipeline id dynamically?
@@ -107,6 +100,14 @@ module Shipwright
         rendered_template
     end
 
+    def render_template_vars(rendered_template, template_vars)
+      unless template_vars.nil?
+        template_vars.each do |template_var|
+          rendered_template.gsub!("$$#{template_var['key']}", "#{template_var['value']}")
+        end
+      end
+    end
+
     def render_and_write(pipeline_config:, path:, template_name:, project_name:, app_name:, app_template_vars: nil)
       if path.end_with?(template_name)
         template_string = IO.read(path)
@@ -130,6 +131,7 @@ module Shipwright
                 template_string: template_string,
                 region_template_vars: region['template_vars'],
                 app_template_vars: app_template_vars,
+                pipeline_template_vars: pipeline_config['template_vars'],
                 output_name: output_name,
                 triggers: pipeline_config['triggers'],
                 account_id: region['account'],
