@@ -36,31 +36,14 @@ pipelines:
   - name: deploy-to-prod
     templateName: prod.json
     regions:
-      # live production traffic
       - name: asia-northeast1
-        account: ox-delivery-prod-1-asia-northeast1
-      - name: europe-west1
-        account: ox-delivery-prod-42-europe-west1
-      - name: us-central1
-        account: ox-delivery-prod-42-us-central1
-      - name: us-east1
-        account: ox-delivery-prod-42-us-east1
-      - name: us-west1
-        account: ox-delivery-prod-42-us-west1
-      # doesn't exist
-      # - name: us-west2
-      #   account: ox-delivery-prod-42-us-west2
-      # new VPC
-      # issues spinning up k8s in region
-      # - name: asia-northeast1
-      #   account: ox-delivery-prod-42-asia-northeast1
+        account: ox-delivery-prod-42-asia-northeast1
       - name: asia-southeast1
         account: ox-delivery-prod-42-asia-southeast1
       - name: europe-west1
         account: ox-delivery-prod-42-europe-west1
       - name: us-central1
         account: ox-delivery-prod-42-us-central1
-      # live production traffiic
       - name: us-east1
         account: ox-delivery-prod-42-us-east1
       - name: us-east4
@@ -101,6 +84,76 @@ apps:
     template_vars:
       - key: IMAGE_TAG_PATH
         value: dsAdvertiser.image.tag
+        
+  aps:
+    pipelines:
+      - name: deploy-to-devint
+        triggers:
+        - type: pipeline
+          application: aps-managed
+          pipeline: bake
+      - name: deploy-to-qa
+        triggers:
+        - type: pipeline
+          application: aps-managed
+          pipeline: deploy-to-devint
+          region: us-east4
+      - name: deploy-to-prod
+        triggers:
+        - type: pipeline
+          application: aps-managed
+          pipeline: deploy-to-qa
+          region: us-east4
+    template_vars:
+      - key: IMAGE_TAG_PATH
+        value: deployment.containers.apsServer.imageTag  
+
+  aqs:
+    pipelines:
+      - name: deploy-to-devint
+        triggers:
+        - type: pipeline
+          application: aqs-managed
+          pipeline: bake
+      - name: deploy-to-qa
+        triggers:
+        - type: pipeline
+          application: aqs-managed
+          pipeline: deploy-to-devint
+          region: us-east4
+      - name: deploy-to-prod
+        triggers:
+        - type: pipeline
+          application: aqs-managed
+          pipeline: deploy-to-qa
+          region: us-east4
+    template_vars:
+      - key: IMAGE_TAG_PATH
+        value: deployment.containers.aqs.imageTag 
+
+  bid-listener:
+    pipelines:
+      - name: deploy-to-devint
+        triggers:
+        - type: pipeline
+          application: bid-listener-managed
+          pipeline: bake
+      - name: deploy-to-qa
+        triggers:
+        - type: pipeline
+          application: bid-listener-managed
+          pipeline: deploy-to-devint
+          region: us-east4
+      - name: deploy-to-prod
+        triggers:
+        - type: pipeline
+          application: bid-listener-managed
+          pipeline: deploy-to-qa
+          region: us-east4
+    template_vars:
+      - key: IMAGE_TAG_PATH
+        value: deployment.containers.aqBidListener.imageTag
+
   broker:
     pipelines:
       - name: deploy-to-devint
@@ -157,6 +210,45 @@ apps:
       - key: IMAGE_TAG_PATH
         value: deployment.containers.currencyservice.imageTag
 
+  delivery-etl:
+    pipelines:
+    - name: deploy-to-devint
+      templateName: deploy.json
+      template_vars:
+      - key: ENVIRONMENT
+        value: devint
+      triggers:
+      - type: pipeline
+        application: delivery-etl-managed
+        pipeline: bake
+    - name: deploy-to-qa
+      templateName: deploy.json
+      template_vars:
+      - key: ENVIRONMENT
+        value: qa
+      triggers:
+      - type: pipeline
+        application: delivery-etl-managed
+        pipeline: deploy-to-devint
+        region: us-east4
+    - name: deploy-to-prod
+      templateName: deploy-prod.json
+      template_vars:
+      - key: ENVIRONMENT
+        value: prod
+      # ETL only needs to run in 1 region to write to multi-regional GCS buckets
+      regions:
+      - name: us-central1
+        account: ox-delivery-prod-42-us-central1
+      triggers:
+      - type: pipeline
+        application: delivery-etl-managed
+        pipeline: deploy-to-qa
+        region: us-east4
+    template_vars:
+    - key: IMAGE_TAG_PATH
+      value: imageTag
+      
   gateway:
     pipelines:
       - name: bake
@@ -188,6 +280,45 @@ apps:
       - key: IMAGE_TAG_PATH
         value: deployment.containers.mops.imageTag
 
+  glbms-etl:
+    pipelines:
+    - name: deploy-to-devint
+      templateName: deploy.json
+      template_vars:
+      - key: ENVIRONMENT
+        value: devint
+      triggers:
+      - type: pipeline
+        application: glbms-etl-managed
+        pipeline: bake
+    - name: deploy-to-qa
+      templateName: deploy.json
+      template_vars:
+      - key: ENVIRONMENT
+        value: qa
+      triggers:
+      - type: pipeline
+        application: glbms-etl-managed
+        pipeline: deploy-to-devint
+        region: us-east4
+    - name: deploy-to-prod
+      templateName: deploy-prod.json
+      template_vars:
+      - key: ENVIRONMENT
+        value: prod
+      # ETL only needs to run in 1 region to write to multi-regional GCS buckets
+      regions:
+      - name: us-central1
+        account: ox-delivery-prod-42-us-central1
+      triggers:
+      - type: pipeline
+        application: glbms-etl-managed
+        pipeline: deploy-to-qa
+        region: us-east4
+    template_vars:
+    - key: IMAGE_TAG_PATH
+      value: imageTag
+
   mops:
     pipelines:
       - name: deploy-to-devint
@@ -215,6 +346,110 @@ apps:
     template_vars:
       - key: IMAGE_TAG_PATH
         value: deployment.containers.mops.imageTag
+
+  pds:
+    pipelines:
+      - name: deploy-to-devint
+        triggers:
+        - type: pipeline
+          application: pds-managed
+          pipeline: bake
+      - name: deploy-to-qa
+        triggers:
+        - type: pipeline
+          application: pds-managed
+          pipeline: deploy-to-devint
+          region: us-east4
+      - name: deploy-to-prod
+        triggers:
+        - type: pipeline
+          application: pds-managed
+          pipeline: deploy-to-qa
+          region: us-east4
+    template_vars:
+      - key: IMAGE_TAG_PATH
+        value: containers.dsPublisherServer.imageTag
+
+  ssrtb:
+    pipelines:
+      - name: bake
+        templateName: bake-each-region.json
+      - name: deploy-to-devint
+        triggers:
+        - type: pipeline
+          application: ssrtb-managed
+          pipeline: bake
+      - name: deploy-to-qa
+        triggers:
+        - type: pipeline
+          application: ssrtb-managed
+          pipeline: deploy-to-devint
+          region: us-east4
+      - name: deploy-to-prod
+        templateName: prod-each-region.json
+        triggers:
+        - type: pipeline
+          application: ssrtb-managed
+          pipeline: deploy-to-qa
+          region: us-east4
+    template_vars:
+      - key: IMAGE_TAG_PATH
+        value: ssrtb.image.tag
+
+  # TODO -- current supplier uses canary
+  supplier:
+    pipelines:
+      - name: deploy-to-devint
+        triggers:
+        - type: pipeline
+          application: supplier-managed
+          pipeline: bake
+      - name: deploy-to-qa
+        triggers:
+        - type: pipeline
+          application: supplier-managed
+          pipeline: deploy-to-devint
+          region: us-east4
+      - name: deploy-to-prod
+        triggers:
+        - type: pipeline
+          application: supplier-managed
+          pipeline: deploy-to-qa
+          region: us-east4
+    template_vars:
+      - key: IMAGE_TAG_PATH
+        value: deployment.containers.supplier.imageTag
+
+  tqs:
+    pipelines:
+      - name: bake
+        templateName: bake-each-region.json
+      - name: deploy-to-devint
+        triggers:
+        - type: pipeline
+          application: tqs-managed
+          pipeline: bake
+      - name: deploy-to-qa
+        triggers:
+        - type: pipeline
+          application: tqs-managed
+          pipeline: deploy-to-devint
+          region: us-east4
+      - name: deploy-to-prod
+        triggers:
+        - type: pipeline
+          application: tqs-managed
+          pipeline: deploy-to-qa
+          region: us-east4
+    template_vars:
+      - key: DATA_SYNC_IMAGE_TAG_PATH 
+        value: deployment.containers.tqs_data_synchronizer.image_tag
+      - key: REDIS_LOADER_IMAGE_TAG_PATH 
+        value: deployment.containers.tqs_redis_loader.image_tag
+      - key: RESOURCES_IMAGE_TAG_PATH 
+        value: deployment.containers.tqs_resources.image_tag
+      - key: SERVER_IMAGE_TAG_PATH 
+        value: deployment.containers.tqs_server.image_tag
 
   weightwatchers:
     pipelines:
@@ -245,3 +480,5 @@ apps:
     template_vars:
       - key: IMAGE_TAG_PATH
         value: deployment.containers.weightwatchers.imageTag
+
+# TODO - UDS has a strange setup currently -- not sure how to handle it
