@@ -110,11 +110,12 @@ module Shipwright
     def render_and_write(pipeline_config:, path:, template_name:, project_name:, app_name:, app_template_vars: nil)
       if path.end_with?(template_name)
         template_string = IO.read(path)
-
+        pipeline_name = pipeline_config['name']
         if pipeline_config['regions']
           pipeline_config['regions'].each do |region|
+            region_name = region['name']
             # maybe just append account name?
-            output_name = "#{template_name.gsub('.json', '')}-#{region['name']}.json"
+            output_name = "#{pipeline_name}-#{region_name}.json"
             if region['outputName']
               output_name = "#{region['outputName']}"
             end
@@ -125,14 +126,14 @@ module Shipwright
             unless output_file.size > 0
               rendered_template = render_template(
                 app_name: app_name,
-                region: region['name'],
+                region: region_name,
                 template_string: template_string,
                 region_template_vars: region['template_vars'],
                 app_template_vars: app_template_vars,
                 output_name: output_name,
                 triggers: pipeline_config['triggers'],
                 account_id: region['account'],
-                pipeline_name: pipeline_config['name']
+                pipeline_name: pipeline_name
               )
 
               File.open(output_path, 'w') { |file| file.write(rendered_template) }
@@ -245,5 +246,3 @@ module Shipwright
     end
   end
 end
-
-
