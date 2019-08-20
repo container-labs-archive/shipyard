@@ -217,7 +217,8 @@ module Shipwright
                   path: path,
                   template_name: template_name,
                   app_name: app_name,
-                  project_name: project_name
+                  project_name: project_name,
+                  app_template_vars: app_config['template_vars']
                 )
               end
               project_base_files.each do|path|
