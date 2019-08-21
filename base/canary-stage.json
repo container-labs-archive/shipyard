@@ -1,0 +1,154 @@
+{
+  "appConfig": {},
+  "expectedArtifacts": [
+    {
+      "defaultArtifact": {
+        "id": "f6cfd937-d33c-46fa-86f2-792f25c55d4e",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/supplier/${parameters.candidateGitCommit}/values/values-prod.yaml",
+        "reference": "gs://ox-prod-ci-cd-deployment-artifacts/supplier/${parameters.candidateGitCommit}/values/values-prod.yaml",
+        "type": "gcs/object"
+      },
+      "displayName": "canary-values-prod",
+      "id": "920c0e65-df83-48e8-a7cd-960bf0dfe0b8",
+      "matchArtifact": {
+        "id": "3acb69a8-4b90-4767-8fcf-b72bd77bf41f",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/supplier_does_not_exist",
+        "type": "gcs/object"
+      },
+      "useDefaultArtifact": true,
+      "usePriorArtifact": false
+    },
+    {
+      "defaultArtifact": {
+        "id": "c60346ff-459f-4ff4-a370-172c7d737bbb",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/supplier/${parameters.candidateGitCommit}/charts/supplier.tgz",
+        "reference": "gs://ox-prod-ci-cd-deployment-artifacts/supplier/${parameters.candidateGitCommit}/charts/supplier.tgz",
+        "type": "gcs/object"
+      },
+      "displayName": "canary-chart",
+      "id": "47296e4b-f9d9-42b2-a5c6-e8a518804646",
+      "matchArtifact": {
+        "id": "cce91e05-72de-4837-b964-15e1f35d02c2",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/supplier/_does_not_exist",
+        "type": "gcs/object"
+      },
+      "useDefaultArtifact": true,
+      "usePriorArtifact": false
+    },
+    {
+      "defaultArtifact": {
+        "id": "6e497fa6-1854-42f6-aaf4-3f5de1fb5524",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/supplier/values/values-prod.yaml",
+        "reference": "gs://ox-prod-ci-cd-deployment-artifacts/supplier/values/values-prod.yaml",
+        "type": "gcs/object"
+      },
+      "displayName": "baseline-values-prod",
+      "id": "ea90d126-1cbf-4814-852e-81c45bda0cd5",
+      "matchArtifact": {
+        "id": "a2c3ddd9-b369-45e8-b284-acb362303c53",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/supplier/_does_not_exist",
+        "type": "gcs/object"
+      },
+      "useDefaultArtifact": true,
+      "usePriorArtifact": false
+    },
+    {
+      "defaultArtifact": {
+        "id": "c702134c-f3a5-45b3-adad-8e4fe6bfeae5",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/supplier/charts/supplier.tgz",
+        "reference": "gs://ox-prod-ci-cd-deployment-artifacts/supplier/charts/supplier.tgz",
+        "type": "gcs/object"
+      },
+      "displayName": "baseline-chart",
+      "id": "9e8da44e-5468-4d17-abd2-5c634e421971",
+      "matchArtifact": {
+        "id": "d7ed7af2-3357-4c24-b817-aaec8f4b6d39",
+        "name": "gs://ox-prod-ci-cd-deployment-artifacts/supplier/charts/supplier.tgz",
+        "type": "gcs/object"
+      },
+      "useDefaultArtifact": true,
+      "usePriorArtifact": false
+    }
+  ],
+  "keepWaitingPipelines": false,
+  "limitConcurrent": true,
+  "parameterConfig": [
+    {
+      "default": "",
+      "description": "",
+      "hasOptions": false,
+      "label": "Candidate Git Commit",
+      "name": "candidateGitCommit",
+      "options": [
+        {
+          "value": ""
+        }
+      ],
+      "pinned": true,
+      "required": true
+    },
+    {
+      "default": "",
+      "description": "",
+      "hasOptions": false,
+      "label": "baselineGitCommit",
+      "name": "baselineGitCommit",
+      "options": [
+        {
+          "value": ""
+        }
+      ],
+      "pinned": false,
+      "required": true
+    }
+  ],
+  "stages": [
+    {
+      "account": "ox-delivery-prod-42-asia-southeast1",
+      "app": "broker",
+      "cloudProvider": "kubernetes",
+      "expectedArtifacts": [],
+      "location": "default",
+      "manifestName": "deployment supplier",
+      "mode": "static",
+      "name": "Find Artifacts From Resource (Manifest)",
+      "refId": "3",
+      "requisiteStageRefIds": [],
+      "type": "findArtifactsFromResource"
+    },
+    {
+      "failOnFailedExpressions": true,
+      "name": "Evaluate Variables",
+      "refId": "4",
+      "requisiteStageRefIds": [
+        "3"
+      ],
+      "type": "evaluateVariables",
+      "variables": [
+        {
+          "key": "baselineGitCommit",
+          "value": "${#stage( 'Find Artifacts From Resource (Manifest)' )['outputs']['manifest']['spec']['template']['spec']['containers'].?[name=='supplier'][0]['image'].split(':')[1]}"
+        }
+      ]
+    },
+    {
+      "application": "$$SERVICE_NAME",
+      "failPipeline": true,
+      "name": "Pipeline",
+      // TODO: wire up downstream trigger
+      "pipeline": "afaf19e3-aaeb-4178-8658-b4e3338ea122",
+      "pipelineParameters": {
+        "baselineGitCommit": "${baselineGitCommit}",
+        "candidateGitCommit": "${parameters.candidateGitCommit}"
+      },
+      "refId": "7",
+      "requisiteStageRefIds": [
+        "4"
+      ],
+      "type": "pipeline",
+      "waitForCompletion": true
+    }
+  ],
+  "triggers": [],
+  "updateTs": "1565289841727"
+}

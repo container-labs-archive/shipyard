@@ -31,6 +31,37 @@ pipelines:
         address: aq_ci-cd
 
 apps:
+  # pg-web-mysql
+  esdb-pgweb:
+    pipelines:
+      - name: deploy-to-devint
+        triggers:
+        - type: pipeline
+          # TODO: drop managed when it's not hard coded to the uploader
+          application: esdb-pgweb-managed
+          pipeline: bake
+      - name: deploy-to-qa
+        triggers:
+        - type: pipeline
+          # TODO: drop managed when it's not hard coded to the uploader
+          application: esdb-pgweb-managed
+          pipeline: deploy-to-devint
+          region: us-central1
+      - name: deploy-to-prod
+        triggers:
+        - type: pipeline
+          # TODO: drop managed when it's not hard coded to the uploader
+          application: esdb-pgweb-managed
+          pipeline: deploy-to-qa
+          # TODO: make regions + pipeline pairs easier to manage
+          region: us-central1
+    # TODO: move to overrides
+    template_vars:
+      - key: IMAGE_TAG_PATH
+        value: deployment.containers.aqBlockingServiceJava.imageTag
+      - key: CHART_NAME
+        value: cool-chart
+
   blocking-service:
     pipelines:
       - name: deploy-to-devint

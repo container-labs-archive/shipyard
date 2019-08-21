@@ -90,6 +90,7 @@ module Shipwright
               end
 
               pipeline_id = @pipeline_ids[trigger_key]
+              # TODO: add warnnig
               rendered_template.gsub!('$$TRIGGER_PIPELINE_UUID', pipeline_id)
             end
             if trigger['type'] == 'pubsub'
@@ -214,7 +215,8 @@ module Shipwright
                   path: path,
                   template_name: template_name,
                   app_name: app_name,
-                  project_name: project_name
+                  project_name: project_name,
+                  app_template_vars: app_config['template_vars']
                 )
               end
               project_base_files.each do|path|
